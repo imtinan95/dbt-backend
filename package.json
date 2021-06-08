@@ -1,0 +1,17 @@
+{
+  "name": "imtinan_4018-dbt-project-backend",
+  "version": "1.0.0",
+  "description": "backend for DBT Project",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js"
+  },
+  "author": "ironman",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.7"
+  }
+}
