@@ -37,7 +37,7 @@ app.get("/save", (req, res) => {
 
 app.get("/del", (req, res) => {
   res.locals.db.query(
-    "DELETE FROM candidates WHERE name='sheeda'",
+    "DELETE FROM tb_position WHERE PosID='PosID'",
     (error, rows) => {
       if (error) throw error;
       res.send(rows);
