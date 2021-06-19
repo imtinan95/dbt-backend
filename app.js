@@ -1,5 +1,6 @@
 var mysql = require("mysql");
 const express = require("express");
+const cors = require("cors");
 const app = express();
 const port = 61691;
 
@@ -10,26 +11,40 @@ const db = mysql.createConnection({
   database: "testDB",
 });
 
-var username = " Makta ";
+app.use(express.json());
+app.use(cors());
 app.use((res, req, next) => {
   req.locals.db = db;
   next();
 });
 
 app.get("/", (req, res) => {
-  res.locals.db.query("SELECT * FROM candidates", (error, rows) => {
-    if (error) throw error;
+  res.locals.db.query("SELECT * FROM tb_candidate", (error, rows) => {
     res.send(rows);
   });
 });
-
+app.post("/dataEntry/fetch", (req, res) => {
+  console.log(req.body);
+  const { name, email, pass } = req.body;
+  res.locals.db.query(
+    "INSERT INTO tb_fetch(name,email,pass) VALUES ('name','tests','pass')",
+    (error, rows) => {
+      console.log(Object.keys(error));
+      console.log(error);
+      if (error) {
+        console.log(Object.keys(error));
+        const errNo = error;
+        const message = errNo == 1062 ? "Duplicate Data " : "Enter Again";
+        return res.status(400).send(message);
+      }
+      res.status(200).send(rows);
+    }
+  );
+});
 app.get("/save", (req, res) => {
   res.locals.db.query(
-    "INSERT INTO candidates(cnic,name,contact,dob,degree,roll) VALUES (321,'" +
-      username +
-      "',030351,'sept','cs',4021)",
+    "INSERT INTO tb_fetch(name,email,password) VALUES ('','','')",
     (error, rows) => {
-      if (error) throw error;
       res.send(rows);
     }
   );
@@ -37,9 +52,8 @@ app.get("/save", (req, res) => {
 
 app.get("/del", (req, res) => {
   res.locals.db.query(
-    "DELETE FROM tb_position WHERE PosID='PosID'",
+    "DELETE FROM tb_fetch WHERE email='muhammad.bscs4018@iiu.edu.pk'",
     (error, rows) => {
-      if (error) throw error;
       res.send(rows);
     }
   );
