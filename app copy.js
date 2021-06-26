@@ -27,28 +27,12 @@ app.post("/dataEntry/fetch", (req, res) => {
   console.log(req.body);
   const { name, email, pass } = req.body;
   res.locals.db.query(
-    `INSERT INTO tb_fetch(name,email,pass) VALUES ('${name}','${email.toString()}','${pass}')`,
+    `INSERT INTO tb_fetch(name,email,pass) VALUES ('${name}','${email}','${pass}')`,
     (error, rows) => {
+      console.log(Object.keys(error));
       console.log(error);
       if (error) {
         console.log(Object.keys(error));
-        const errNo = error;
-        const message = errNo == 1062 ? "Duplicate Data " : "Enter Again";
-        return res.status(400).send(message);
-      }
-      res.status(200).send(rows);
-    }
-  );
-});
-app.delete("/dataEntry/fetch", (req, res) => {
-  console.log(req.body);
-  const { name, email, pass } = req.body;
-  res.locals.db.query(
-    `DELETE FROM tb_fetch WHERE 'email' = '${email}'`,
-    (error, rows) => {
-      console.log("Error:", error);
-      if (error) {
-        console.log(" Object.keys", Object.keys(error));
         const errNo = error;
         const message = errNo == 1062 ? "Duplicate Data " : "Enter Again";
         return res.status(400).send(message);
@@ -68,7 +52,7 @@ app.get("/save", (req, res) => {
 
 app.get("/del", (req, res) => {
   res.locals.db.query(
-    "DELETE FROM tb_fetch WHERE name='Tester'",
+    "DELETE FROM tb_fetch WHERE name='Rayyan Khan'",
     (error, rows) => {
       res.send(rows);
     }
