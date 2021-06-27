@@ -12,6 +12,7 @@ const db = mysql.createConnection({
 });
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use((res, req, next) => {
   req.locals.db = db;
@@ -23,7 +24,8 @@ app.get("/", (req, res) => {
     res.send(rows);
   });
 });
-app.post("/dataEntry/fetch", (req, res) => {
+
+app.post("/dataEntry/fetch/save", (req, res) => {
   console.log(req.body);
   const { name, email, pass } = req.body;
   res.locals.db.query(
@@ -40,11 +42,10 @@ app.post("/dataEntry/fetch", (req, res) => {
     }
   );
 });
-app.delete("/dataEntry/fetch", (req, res) => {
+app.post("/dataEntry/fetch/del", (req, res) => {
   console.log(req.body);
-  const { name, email, pass } = req.body;
   res.locals.db.query(
-    `DELETE FROM tb_fetch WHERE 'email' = '${email}'`,
+    `DELETE FROM tb_fetch WHERE email = '${req.body.email}'`,
     (error, rows) => {
       console.log("Error:", error);
       if (error) {
@@ -57,6 +58,13 @@ app.delete("/dataEntry/fetch", (req, res) => {
     }
   );
 });
+
+app.get("/query/candidate", (req, res) => {
+  res.locals.db.query("SELECT * FROM tb_candidate", (error, rows) => {
+    res.send(rows);
+  });
+});
+
 app.get("/save", (req, res) => {
   res.locals.db.query(
     "INSERT INTO tb_fetch(name,email,password) VALUES ('','','')",

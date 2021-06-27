@@ -1,18 +1,15 @@
 var mysql = require("mysql");
 const express = require("express");
-const cors = require("cors");
 const app = express();
 const port = 61691;
 
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "IronMan",
+  host: "http://10.1.1.17",
+  user: "pma",
   password: "",
-  database: "testDB",
+  database: "book_selling_system",
 });
 
-app.use(express.json());
-app.use(cors());
 app.use((res, req, next) => {
   req.locals.db = db;
   next();
@@ -23,24 +20,7 @@ app.get("/", (req, res) => {
     res.send(rows);
   });
 });
-app.post("/dataEntry/fetch", (req, res) => {
-  console.log(req.body);
-  const { name, email, pass } = req.body;
-  res.locals.db.query(
-    `INSERT INTO tb_fetch(name,email,pass) VALUES ('${name}','${email}','${pass}')`,
-    (error, rows) => {
-      console.log(Object.keys(error));
-      console.log(error);
-      if (error) {
-        console.log(Object.keys(error));
-        const errNo = error;
-        const message = errNo == 1062 ? "Duplicate Data " : "Enter Again";
-        return res.status(400).send(message);
-      }
-      res.status(200).send(rows);
-    }
-  );
-});
+
 app.get("/save", (req, res) => {
   res.locals.db.query(
     "INSERT INTO tb_fetch(name,email,password) VALUES ('','','')",
