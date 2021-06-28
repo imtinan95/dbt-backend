@@ -1,14 +1,16 @@
-var mysql = require("mysql");
-const express = require("express");
-const cors = require("cors");
+var mysql = require('mysql');
+const express = require('express');
+const cors = require('cors');
 const app = express();
 const port = 61691;
 
+const candidatesRoute = require('./routes/candidates')
+
 const db = mysql.createConnection({
-  host: "localhost",
-  user: "IronMan",
-  password: "",
-  database: "testDB",
+  host: 'localhost',
+  user: 'IronMan',
+  password: '',
+  database: 'testDB',
 });
 
 app.use(express.json());
@@ -19,13 +21,22 @@ app.use((res, req, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.locals.db.query("SELECT * FROM tb_fetch", (error, rows) => {
+app.use('/candidates/', candidatesRoute)
+
+
+
+
+
+
+
+
+//testing routes
+app.get('/', (req, res) => {
+  res.locals.db.query('SELECT * FROM tb_fetch', (error, rows) => {
     res.send(rows);
   });
 });
-
-app.post("/dataEntry/fetch/save", (req, res) => {
+app.post('/dataEntry/fetch/save', (req, res) => {
   console.log(req.body);
   const { name, email, pass } = req.body;
   res.locals.db.query(
@@ -35,23 +46,22 @@ app.post("/dataEntry/fetch/save", (req, res) => {
       if (error) {
         console.log(Object.keys(error));
         const errNo = error;
-        const message = errNo == 1062 ? "Duplicate Data " : "Enter Again";
+        const message = errNo == 1062 ? 'Duplicate Data ' : 'Enter Again';
         return res.status(400).send(message);
       }
       res.status(200).send(rows);
     }
   );
 });
-app.post("/dataEntry/fetch/del", (req, res) => {
-  console.log(req.body);
+app.post('/dataEntry/fetch/del', (req, res) => {
   res.locals.db.query(
     `DELETE FROM tb_fetch WHERE email = '${req.body.email}'`,
     (error, rows) => {
-      console.log("Error:", error);
+      console.log('Error:', error);
       if (error) {
-        console.log(" Object.keys", Object.keys(error));
+        console.log(' Object.keys', Object.keys(error));
         const errNo = error;
-        const message = errNo == 1062 ? "Duplicate Data " : "Enter Again";
+        const message = errNo == 1062 ? 'Duplicate Data ' : 'Enter Again';
         return res.status(400).send(message);
       }
       res.status(200).send(rows);
@@ -59,24 +69,38 @@ app.post("/dataEntry/fetch/del", (req, res) => {
   );
 });
 
-app.get("/query/candidate", (req, res) => {
-  res.locals.db.query("SELECT * FROM tb_candidate", (error, rows) => {
+
+
+// for getting data on reports and queries
+
+app.get('/query/candidate', (req, res) => {
+});
+
+app.get('/query/divisions', (req, res) => {
+  res.locals.db.query('SELECT * FROM tb_divisions', (error, rows) => {
     res.send(rows);
   });
 });
 
-app.get("/save", (req, res) => {
+//.....
+
+
+
+
+
+
+app.get('/save', (req, res) => {
   res.locals.db.query(
-    "INSERT INTO tb_fetch(name,email,password) VALUES ('','','')",
+    'INSERT INTO tb_fetch(name,email,password) VALUES ("","","")',
     (error, rows) => {
       res.send(rows);
     }
   );
 });
 
-app.get("/del", (req, res) => {
+app.get('/del', (req, res) => {
   res.locals.db.query(
-    "DELETE FROM tb_fetch WHERE name='Tester'",
+    'DELETE FROM tb_candidate WHERE candidateName="Sadiq"',
     (error, rows) => {
       res.send(rows);
     }
