@@ -3,31 +3,32 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    res.locals.db.query('SELECT * FROM tb_candidate', (error, rows) => {
+    res.locals.db.query('SELECT * FROM `tb_division`', (error, rows) => {
         res.send(rows);
     });
 })
 
 router.post('/', (req, res) => {
     console.log(req.body);
-    const { RollNo, CandidateName, CNIC, DOB, Contact, Degree } = req.body;
-    const query = `INSERT INTO tb_candidate(RollNo,CandidateName,CNIC,DOB, Contact, Degree) VALUES ('${RollNo}','${CandidateName.toString()}','${CNIC}','${DOB.toString()}','${Contact.toString()}','${Degree.toString()}')`;
+    const { DivisionID, DivisionName, Contact, DivisionManager, ParentMinistry, MinistryID } = req.body;
+
+    const query = `INSERT INTO tb_division(DivisionID,DivisionName,Contact, DivisionManager,ParentMinistry, MinistryID) VALUES ('${DivisionID.toString()}','${DivisionName.toString()}','${Contact.toString()}','${DivisionManager.toString()}','${ParentMinistry.toString()}','${MinistryID.toString()}')`;
 
     res.locals.db.query(query, (error, rows) => {
         console.log(error);
+
         if (error) {
             console.log(Object.keys(error));
             const errNo = error;
             const message = errNo == 1062 ? 'Duplicate Data ' : 'Duplicate Entry, Enter Again';
             return res.status(400).send(message);
         }
-        res.status(200).send(rows);
     }
     );
 })
 
-router.delete('/:RollNo', (req, res) => {
-    const query = `DELETE FROM tb_candidate WHERE RollNo = '${req.params.RollNo}'`;
+router.delete('/:DivisionID', (req, res) => {
+    const query = `DELETE FROM tb_division WHERE DivisionID = '${req.params.DivisionID}'`;
     res.locals.db.query(query, (error, rows) => {
         query
         console.log('Error:', error);

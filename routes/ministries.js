@@ -3,18 +3,20 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-    res.locals.db.query('SELECT * FROM tb_candidate', (error, rows) => {
+    res.locals.db.query('SELECT * FROM `tb_ministry`', (error, rows) => {
         res.send(rows);
     });
 })
 
 router.post('/', (req, res) => {
     console.log(req.body);
-    const { RollNo, CandidateName, CNIC, DOB, Contact, Degree } = req.body;
-    const query = `INSERT INTO tb_candidate(RollNo,CandidateName,CNIC,DOB, Contact, Degree) VALUES ('${RollNo}','${CandidateName.toString()}','${CNIC}','${DOB.toString()}','${Contact.toString()}','${Degree.toString()}')`;
+    const { MinistryID, MinistryName, MinistryDivisions, MinistryHQ, MinisterResponsible } = req.body;
+
+    const query = `INSERT INTO tb_ministry(MinistryID,MinistryName,MinistryDivisions, MinistryHQ,MinisterResponsible) VALUES ('${MinistryID.toString()}','${MinistryName.toString()}','${MinistryDivisions.toString()}','${MinistryHQ.toString()}','${MinisterResponsible.toString()}')`;
 
     res.locals.db.query(query, (error, rows) => {
         console.log(error);
+
         if (error) {
             console.log(Object.keys(error));
             const errNo = error;
@@ -26,8 +28,8 @@ router.post('/', (req, res) => {
     );
 })
 
-router.delete('/:RollNo', (req, res) => {
-    const query = `DELETE FROM tb_candidate WHERE RollNo = '${req.params.RollNo}'`;
+router.delete('/:MinistryID', (req, res) => {
+    const query = `DELETE FROM tb_ministry WHERE MinistryID = '${req.params.MinistryID}'`;
     res.locals.db.query(query, (error, rows) => {
         query
         console.log('Error:', error);
