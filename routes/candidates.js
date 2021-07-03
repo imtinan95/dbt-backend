@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     console.log(req.body);
     const { RollNo, CandidateName, CNIC, DOB, Contact, Degree } = req.body;
-    const query = `INSERT INTO tb_candidate(RollNo,CandidateName,CNIC,DOB, Contact, Degree) VALUES ('${RollNo}','${CandidateName}','${CNIC}','${DOB.toString()}','${Contact}','${Degree}')`;
+    const query = `INSERT INTO tb_candidate(RollNo,CandidateName,CNIC,DOB, Contact, Degree) VALUES ('${RollNo}','${CandidateName}','${CNIC}','${DOB}','${Contact}','${Degree}')`;
     console.log("query is ", query)
 
     res.locals.db.query(query, (error, rows) => {

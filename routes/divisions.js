@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
     console.log(req.body);
     const { DivisionID, DivisionName, Contact, DivisionManager, ParentMinistry, MinistryID } = req.body;
 
-    const query = `INSERT INTO tb_division(DivisionID,DivisionName,Contact, DivisionManager,ParentMinistry, MinistryID) VALUES ('${DivisionID.toString()}','${DivisionName.toString()}','${Contact.toString()}','${DivisionManager.toString()}','${ParentMinistry.toString()}','${MinistryID.toString()}')`;
+    const query = `INSERT INTO tb_division(DivisionID,DivisionName,Contact, DivisionManager,ParentMinistry, MinistryID) VALUES ('${DivisionID}','${DivisionName}','${Contact}','${DivisionManager}','${ParentMinistry}','${MinistryID}')`;
 
     res.locals.db.query(query, (error, rows) => {
         console.log(error);
@@ -23,12 +23,19 @@ router.post('/', (req, res) => {
             const message = errNo == 1062 ? 'Duplicate Data ' : 'Duplicate Entry, Enter Again';
             return res.status(400).send(message);
         }
+        res.status(200).send(rows);
     }
     );
 })
 
-router.delete('/:DivisionID', (req, res) => {
-    const query = `DELETE FROM tb_division WHERE DivisionID = '${req.params.DivisionID}'`;
+
+router.patch('/:DivisionID', (req, res) => {
+    const { DivisionID, DivisionName, Contact, DivisionManager, ParentMinistry, MinistryID } = req.body;
+
+    const query = `UPDATE tb_division SET DivisionManager= '${DivisionManager}', Contact = '${Contact}' WHERE DivisionID ='${req.params.DivisionID}'`;
+
+    console.log('DivisionID to be updated is ', req.params.DivisionID)
+    console.log('Body to be updated is ', req.body)
     res.locals.db.query(query, (error, rows) => {
         query
         console.log('Error:', error);
@@ -41,6 +48,25 @@ router.delete('/:DivisionID', (req, res) => {
         res.status(200).send(rows);
     }
     );
+
+})
+
+
+router.delete('/:DivisionID', (req, res) => {
+    const query = `DELETE FROM tb_division WHERE DivisionID = '${req.params.DivisionID}'`;
+    res.locals.db.query(query, (error, rows) => {
+        query
+        console.log('Error:', error);
+        if (error) {
+            console.log(' Object.keys', Object.keys(error));
+            const errNo = error;
+            const message = errNo == 1062 ? 'Data not Found' : 'Can\'t delete';
+            return res.status(400).send(message);
+        }
+        res.status(200).send(rows);
+    }
+    );
 });
+
 
 module.exports = router;
