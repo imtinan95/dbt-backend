@@ -28,6 +28,27 @@ router.post('/', (req, res) => {
     );
 })
 
+router.patch('/:MinistryID', (req, res) => {
+    const { MinistryID, MinistryName, MinistryDivisions, MinistryHQ, MinisterResponsible } = req.body;
+    const query = `UPDATE tb_ministry SET MinistryDivisions = '${MinistryDivisions}', MinisterResponsible= '${MinisterResponsible}' WHERE MinistryID ='${req.params.MinistryID}'`;
+
+    console.log('MinistryID to be updated is ', req.params.MinistryID)
+    console.log('Body to be updated is ', req.body)
+    res.locals.db.query(query, (error, rows) => {
+        query
+        console.log('Error:', error);
+        if (error) {
+            console.log(' Object.keys', Object.keys(error));
+            const errNo = error;
+            const message = errNo == 1062 ? 'Data not Found' : 'Enter Again';
+            return res.status(400).send(message);
+        }
+        res.status(200).send(rows);
+    }
+    );
+
+})
+
 router.delete('/:MinistryID', (req, res) => {
     const query = `DELETE FROM tb_ministry WHERE MinistryID = '${req.params.MinistryID}'`;
     res.locals.db.query(query, (error, rows) => {

@@ -28,6 +28,27 @@ router.post('/', (req, res) => {
     );
 })
 
+router.patch('/:EmployeeID', (req, res) => {
+    const { EmployeeID, EmployeeName, CNIC, DOB, Contact } = req.body;
+    const query = `UPDATE tb_employee SET Contact = '${Contact}', DOB = '${DOB}' WHERE EmployeeID ='${req.params.EmployeeID}'`;
+
+    console.log('EmployeeID to be updated is ', req.params.EmployeeID)
+    console.log('Body to be updated is ', req.body)
+    res.locals.db.query(query, (error, rows) => {
+        query
+        console.log('Error:', error);
+        if (error) {
+            console.log(' Object.keys', Object.keys(error));
+            const errNo = error;
+            const message = errNo == 1062 ? 'Data not Found' : 'Enter Again';
+            return res.status(400).send(message);
+        }
+        res.status(200).send(rows);
+    }
+    );
+
+})
+
 router.delete('/:EmployeeID', (req, res) => {
     const query = `DELETE FROM tb_employee WHERE EmployeeID = '${req.params.EmployeeID}'`;
     res.locals.db.query(query, (error, rows) => {
