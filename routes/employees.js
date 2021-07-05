@@ -12,7 +12,7 @@ router.post('/', (req, res) => {
     console.log(req.body);
     const { EmployeeID, EmployeeName, CNIC, DOB, Contact } = req.body;
 
-    const query = `INSERT INTO tb_employee(EmployeeID,EmployeeName,CNIC, DOB,Contact) VALUES ('${EmployeeID.toString()}','${EmployeeName.toString()}','${CNIC.toString()}','${DOB.toString()}','${Contact.toString()}')`;
+    const query = `INSERT INTO tb_employee(EmployeeID,EmployeeName,CNIC, DOB,Contact) VALUES ('${EmployeeID}','${EmployeeName}','${CNIC}','${DOB}','${Contact}')`;
 
     res.locals.db.query(query, (error, rows) => {
         console.log(error);

@@ -12,7 +12,7 @@ const ministriesRoute = require('./routes/ministries')
 
 const db = mysql.createConnection({
   host: 'localhost',
-  user: 'IronMan',
+  user: 'root',
   password: '',
   database: 'testDB',
 });
